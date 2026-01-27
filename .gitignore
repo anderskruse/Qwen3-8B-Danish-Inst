@@ -1,0 +1,30 @@
+# Model outputs
+outputs/*
+!outputs/.gitkeep
+*.pt
+*.bin
+*.safetensors
+
+# Python
+__pycache__/
+*.py[cod]
+.eggs/
+*.egg-info/
+
+# Hugging Face cache
+.cache/
+hub/
+
+# Environment
+.env
+.venv/
+venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Logs
+*.log
+wandb/
