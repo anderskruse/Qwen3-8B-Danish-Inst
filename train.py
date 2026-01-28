@@ -3,6 +3,10 @@ Fine-tune Qwen3-8B on Danish instruction data.
 """
 
 import os
+# Limit multiprocessing before importing libraries that auto-detect CPU count
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+os.environ["UNSLOTH_NUM_PROC"] = "4"
+
 from unsloth import FastLanguageModel
 from datasets import load_dataset
 from trl import SFTTrainer
