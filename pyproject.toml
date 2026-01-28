@@ -12,4 +12,5 @@ dependencies = [
     "peft>=0.10.0",
     "huggingface_hub>=0.21.0",
     "torch>=2.2.0",
+    "torchvision",
 ]
