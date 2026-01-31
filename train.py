@@ -14,35 +14,25 @@ from trl import SFTTrainer
 from transformers import TrainingArguments
 import config
 
-LORA_ADAPTER_PATH = os.path.join(config.OUTPUT_DIR, "lora_adapter")
 
-def load_model(resume=False):
+def load_model():
     """Load Qwen3 with 4-bit quantization and apply LoRA."""
-    if resume and os.path.exists(LORA_ADAPTER_PATH):
-        print(f"Resuming from saved adapter: {LORA_ADAPTER_PATH}")
-        model, tokenizer = FastLanguageModel.from_pretrained(
-            model_name=LORA_ADAPTER_PATH,
-            max_seq_length=config.MAX_SEQ_LENGTH,
-            load_in_4bit=True,
-            dtype=None,
-        )
-    else:
-        model, tokenizer = FastLanguageModel.from_pretrained(
-            model_name=config.MODEL_NAME,
-            max_seq_length=config.MAX_SEQ_LENGTH,
-            load_in_4bit=True,
-            dtype=None,  # auto-detect
-        )
+    model, tokenizer = FastLanguageModel.from_pretrained(
+        model_name=config.MODEL_NAME,
+        max_seq_length=config.MAX_SEQ_LENGTH,
+        load_in_4bit=True,
+        dtype=None,  # auto-detect
+    )
 
-        model = FastLanguageModel.get_peft_model(
-            model,
-            r=config.LORA_R,
-            lora_alpha=config.LORA_ALPHA,
-            lora_dropout=config.LORA_DROPOUT,
-            target_modules=["q_proj", "k_proj", "v_proj", "o_proj",
-                           "gate_proj", "up_proj", "down_proj"],
-            use_gradient_checkpointing="unsloth",
-        )
+    model = FastLanguageModel.get_peft_model(
+        model,
+        r=config.LORA_R,
+        lora_alpha=config.LORA_ALPHA,
+        lora_dropout=config.LORA_DROPOUT,
+        target_modules=["q_proj", "k_proj", "v_proj", "o_proj",
+                       "gate_proj", "up_proj", "down_proj"],
+        use_gradient_checkpointing="unsloth",
+    )
 
     return model, tokenizer
 
@@ -61,7 +51,7 @@ def main():
     args = parser.parse_args()
 
     print("Loading model...")
-    model, tokenizer = load_model(resume=args.resume)
+    model, tokenizer = load_model()
 
     print("Loading dataset...")
     dataset = load_dataset(config.DATASET_NAME, split="train")
@@ -100,7 +90,20 @@ def main():
     )
 
     print("Starting training...")
-    trainer.train()
+    # Resume from latest checkpoint if --resume and checkpoints exist
+    resume_checkpoint = None
+    if args.resume:
+        checkpoints = [
+            os.path.join(config.OUTPUT_DIR, d)
+            for d in os.listdir(config.OUTPUT_DIR)
+            if d.startswith("checkpoint-")
+        ]
+        if checkpoints:
+            resume_checkpoint = max(checkpoints, key=os.path.getmtime)
+            print(f"Resuming from checkpoint: {resume_checkpoint}")
+        else:
+            print("No checkpoints found, starting from scratch.")
+    trainer.train(resume_from_checkpoint=resume_checkpoint)
 
     # Save
     print("Saving model...")
