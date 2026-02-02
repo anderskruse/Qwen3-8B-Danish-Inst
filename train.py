@@ -16,11 +16,12 @@ import config
 
 
 def load_model():
-    """Load Mistral-Nemo with 4-bit quantization and apply LoRA."""
+    """Load Mistral-Nemo with 8-bit quantization and apply LoRA."""
     model, tokenizer = FastLanguageModel.from_pretrained(
         model_name=config.MODEL_NAME,
         max_seq_length=config.MAX_SEQ_LENGTH,
-        load_in_4bit=True,
+        load_in_4bit=False,
+        load_in_8bit=True,
         dtype=None,  # auto-detect
     )
 

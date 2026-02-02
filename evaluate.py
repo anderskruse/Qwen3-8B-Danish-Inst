@@ -20,7 +20,8 @@ def load_model(model_path):
     model, tokenizer = FastLanguageModel.from_pretrained(
         model_name=model_path,
         max_seq_length=config.MAX_SEQ_LENGTH,
-        load_in_4bit=True,
+        load_in_4bit=False,
+        load_in_8bit=True,
     )
     FastLanguageModel.for_inference(model)
     return model, tokenizer
