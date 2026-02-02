@@ -1,6 +1,6 @@
-# Qwen3-8B Danish Instruct
+# Mistral-Nemo-12B Danish Instruct
 
-Fine-tuning Qwen3-8B on Danish instruction data using the skolegpt-instruct dataset.
+Fine-tuning Mistral-Nemo-12B on Danish instruction data using the skolegpt-instruct dataset.
 
 ## Quick Start
 
@@ -18,7 +18,7 @@ python train.py
 python evaluate.py --model ./outputs/merged_model
 
 # Upload to Hugging Face
-python upload_model.py --repo yourusername/Qwen3-8B-Danish-Instruct
+python upload_model.py --repo yourusername/Mistral-Nemo-12B-Danish-Instruct
 ```
 
 ## Files
@@ -34,9 +34,9 @@ Uses LoRA fine-tuning with Unsloth.
 
 Default config:
 - LoRA r=16, alpha=16
-- Learning rate: 1e-4
-- Batch size: 4 (with 4x gradient accumulation)
-- Epochs: 1
+- Learning rate: 5e-5
+- Batch size: 2 (with 8x gradient accumulation)
+- Epochs: 3
 
 ## Dataset
 
@@ -74,7 +74,7 @@ python train.py && runpodctl stop pod $RUNPOD_POD_ID
 ```bash
 # Start the pod again from dashboard, then:
 cd /workspace/Qwen3-8B-Danish-Inst
-python upload_model.py --repo YOUR_USERNAME/Qwen3-8B-Danish-Instruct
+python upload_model.py --repo YOUR_USERNAME/Mistral-Nemo-12B-Danish-Instruct
 
 # Terminate pod after upload is done
 ```

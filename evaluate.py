@@ -1,5 +1,5 @@
 """
-Evaluate the fine-tuned model on Danish prompts.
+Evaluate the fine-tuned Mistral-Nemo model on Danish prompts.
 """
 
 import argparse
@@ -45,8 +45,8 @@ def generate(model, tokenizer, prompt):
 
     response = tokenizer.decode(outputs[0], skip_special_tokens=True)
     # Extract just the assistant response
-    if "<|assistant|>" in response:
-        response = response.split("<|assistant|>")[-1].strip()
+    if "[/INST]" in response:
+        response = response.split("[/INST]")[-1].strip()
     return response
 
 def main():

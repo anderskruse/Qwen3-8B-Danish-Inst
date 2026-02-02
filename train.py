@@ -1,5 +1,5 @@
 """
-Fine-tune Qwen3-8B on Danish instruction data.
+Fine-tune Mistral-Nemo-12B on Danish instruction data.
 """
 
 import os
@@ -16,7 +16,7 @@ import config
 
 
 def load_model():
-    """Load Qwen3 with 4-bit quantization and apply LoRA."""
+    """Load Mistral-Nemo with 4-bit quantization and apply LoRA."""
     model, tokenizer = FastLanguageModel.from_pretrained(
         model_name=config.MODEL_NAME,
         max_seq_length=config.MAX_SEQ_LENGTH,
@@ -37,7 +37,7 @@ def load_model():
     return model, tokenizer
 
 def format_example(example, tokenizer):
-    """Format a single example for Qwen3 chat template."""
+    """Format a single example for Mistral chat template."""
     messages = [
         {"role": "system", "content": config.SYSTEM_PROMPT},
         {"role": "user", "content": example["question"]},
