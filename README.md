@@ -47,9 +47,11 @@ Default config:
 - Batch size: 2 (with 8x gradient accumulation)
 - Epochs: 3
 
-You can override model and dataset via CLI args:
+All settings can be overridden via CLI args:
 ```bash
 python train.py --model unsloth/some-other-model --dataset your/dataset
+python train.py --epochs 5 --lr 1e-4 --batch-size 4 --grad-accum 4
+python train.py --lora-r 32 --lora-alpha 32 --max-seq-length 2048
 ```
 
 ## GGUF Export
