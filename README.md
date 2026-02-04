@@ -22,6 +22,9 @@ python evaluate.py --model ./outputs/merged_model
 
 # Upload to Hugging Face
 python upload_model.py --repo yourusername/Mistral-Nemo-12B-Danish-Instruct
+
+# Export to GGUF (for llama.cpp, Ollama, etc.)
+python export_gguf.py
 ```
 
 ## Files
@@ -30,6 +33,7 @@ python upload_model.py --repo yourusername/Mistral-Nemo-12B-Danish-Instruct
 - `train.py` - Main training script
 - `evaluate.py` - Test model on Danish prompts
 - `upload_model.py` - Upload to Hugging Face Hub
+- `export_gguf.py` - Export model to GGUF format
 
 ## Training
 
@@ -46,6 +50,33 @@ Default config:
 You can override model and dataset via CLI args:
 ```bash
 python train.py --model unsloth/some-other-model --dataset your/dataset
+```
+
+## GGUF Export
+
+Export the fine-tuned model to GGUF format for use with llama.cpp, Ollama, LM Studio, etc.
+
+```bash
+# Default: q4_k_m quantization
+python export_gguf.py
+
+# Choose quantization method
+python export_gguf.py --quant q8_0
+
+# Custom paths
+python export_gguf.py --model-path ./outputs/lora_adapter --output-dir ./outputs/gguf
+```
+
+Available quantization methods: `q4_k_m`, `q5_k_m`, `q8_0`, `f16`
+
+## Upload
+
+```bash
+# Basic upload
+python upload_model.py --repo yourusername/My-Model
+
+# Specify base model name for the model card
+python upload_model.py --repo yourusername/My-Model --model-name unsloth/Mistral-Nemo-Instruct-2407 --dataset kobprof/skolegpt-instruct
 ```
 
 ## Dataset
