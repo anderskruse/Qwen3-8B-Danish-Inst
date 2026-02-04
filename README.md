@@ -124,6 +124,40 @@ python upload_model.py --repo YOUR_USERNAME/Mistral-Nemo-12B-Danish-Instruct
 
 Weights are saved to `/workspace/Qwen3-8B-Danish-Inst/outputs/merged_model/`.
 
+## Serverless Endpoint
+
+The `endpoint/` folder contains a RunPod serverless endpoint with an OpenAI-compatible chat completions API, powered by vLLM.
+
+### Build and push
+```bash
+cd endpoint
+docker build -t your-registry/llm-endpoint:latest .
+docker push your-registry/llm-endpoint:latest
+```
+
+### Environment variables
+| Variable | Default | Description |
+|---|---|---|
+| `MODEL_NAME` | `unsloth/Mistral-Nemo-Instruct-2407` | HF model or path to upload |
+| `HF_TOKEN` | | Hugging Face token (for gated models) |
+| `MAX_MODEL_LEN` | `4096` | Max context length |
+| `GPU_MEMORY_UTILIZATION` | `0.9` | vLLM GPU memory fraction |
+| `TENSOR_PARALLEL_SIZE` | `1` | Number of GPUs for tensor parallelism |
+
+### Request format (OpenAI-compatible)
+```json
+{
+  "input": {
+    "messages": [
+      {"role": "system", "content": "Du er en hjælpsom assistent."},
+      {"role": "user", "content": "Hvad er koldskål?"}
+    ],
+    "max_tokens": 512,
+    "temperature": 0.7
+  }
+}
+```
+
 ## License
 
 Apache 2.0
